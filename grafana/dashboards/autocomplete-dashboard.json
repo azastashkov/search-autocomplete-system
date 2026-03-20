@@ -155,6 +155,35 @@
         },
         "overrides": []
       }
+    },
+    {
+      "id": 6,
+      "title": "Trie Reload Source",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "targets": [
+        {
+          "expr": "trie_reload_source{source=\"redis\"} == 1",
+          "legendFormat": "redis",
+          "refId": "A"
+        },
+        {
+          "expr": "trie_reload_source{source=\"postgres\"} == 1",
+          "legendFormat": "postgres",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "mappings": [
+            { "type": "value", "options": { "1": { "text": "Active", "color": "green" } } },
+            { "type": "value", "options": { "0": { "text": "Inactive", "color": "red" } } }
+          ]
+        },
+        "overrides": []
+      }
     }
   ]
 }
