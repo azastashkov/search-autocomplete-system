@@ -157,10 +157,10 @@ public class LoadTestApplication implements CommandLineRunner {
         long p99 = percentile(sortedLatencies, 99);
 
         log.info("========== LOAD TEST RESULTS ==========");
-        log.info("Duration:         {:.1f}s", durationSec);
+        log.info("Duration:         {}s", String.format("%.1f", durationSec));
         log.info("Total Requests:   {}", total);
-        log.info("Requests/sec:     {:.2f}", reqPerSec);
-        log.info("Errors:           {} ({:.2f}%)", errorCount, errorRate);
+        log.info("Requests/sec:     {}", String.format("%.2f", reqPerSec));
+        log.info("Errors:           {} ({}%)", errorCount, String.format("%.2f", errorRate));
         log.info("Latency p50:      {}ms", p50);
         log.info("Latency p95:      {}ms", p95);
         log.info("Latency p99:      {}ms", p99);
