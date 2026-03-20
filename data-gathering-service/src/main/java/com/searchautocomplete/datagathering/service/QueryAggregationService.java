@@ -30,7 +30,7 @@ public class QueryAggregationService {
 
     public void addQuery(String query) {
         String normalized = QueryValidator.normalize(query);
-        if (normalized == null || !QueryValidator.isValid(normalized)) {
+        if (!QueryValidator.isValid(normalized)) {
             log.warn("Invalid query rejected: {}", query);
             return;
         }

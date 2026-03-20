@@ -109,7 +109,7 @@ public class LoadTestApplication implements CommandLineRunner {
             List<String> batch = allWords.subList(i, Math.min(i + 100, allWords.size()));
             List<Map<String, String>> queries = batch.stream()
                     .map(word -> Map.of("query", word))
-                    .collect(Collectors.toList());
+                    .toList();
             Map<String, Object> request = Map.of("queries", queries);
 
             try {
