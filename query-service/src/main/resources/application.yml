@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/autocomplete
+    username: postgres
+    password: postgres
   data:
     redis:
       host: ${REDIS_HOST:localhost}
