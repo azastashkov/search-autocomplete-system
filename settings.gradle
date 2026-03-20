@@ -1,0 +1,6 @@
+rootProject.name = 'search-autocomplete-system'
+
+include 'common'
+include 'data-gathering-service'
+include 'query-service'
+include 'load-test-client'

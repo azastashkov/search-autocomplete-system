@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-03-19T00:00:00.000Z" type="device">
+  <diagram id="search-autocomplete-architecture" name="Component Diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Search Autocomplete System — Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="20" width="600" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Client -->
+        <mxCell id="client" value="Client&#xa;(Browser / App)" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="300" width="100" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Data Gathering Service -->
+        <mxCell id="dgs-group" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="300" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="dgs-title" value="Data Gathering Service&#xa;:8081" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="90" width="240" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="dgs-controller" value="QueryController&#xa;POST /api/v1/queries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="130" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="dgs-aggregation" value="QueryAggregationService&#xa;ConcurrentHashMap + LongAdder&#xa;@Scheduled flush (5s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="190" width="240" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="dgs-redis-pub" value="RedisPublisherService&#xa;ZADD sorted set" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="260" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Query Service -->
+        <mxCell id="qs-group" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="400" width="300" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="qs-title" value="Query Service&#xa;:8080" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="410" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="qs-controller" value="AutocompleteController&#xa;GET /api/v1/autocomplete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="450" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="qs-service" value="AutocompleteService&#xa;@Cacheable (Caffeine)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="510" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="qs-trie" value="Trie&#xa;(volatile swap, lock-free reads)&#xa;getTopK(prefix, 5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="570" width="240" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="qs-loader" value="TrieLoaderService&#xa;@Scheduled reload (60s)&#xa;Redis → Trie rebuild" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="640" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- PostgreSQL -->
+        <mxCell id="postgres" value="PostgreSQL&#xa;query_frequency table" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="150" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Redis -->
+        <mxCell id="redis" value="Redis&#xa;Sorted Set&#xa;autocomplete:frequencies" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Prometheus -->
+        <mxCell id="prometheus" value="Prometheus&#xa;:9090" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="560" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Grafana -->
+        <mxCell id="grafana" value="Grafana&#xa;:3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="920" y="560" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows -->
+        <!-- Client to DGS -->
+        <mxCell id="e1" value="POST queries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.3;entryX=0;entryY=0.5;fontSize=10;" edge="1" source="client" target="dgs-controller" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Client to QS -->
+        <mxCell id="e2" value="GET autocomplete" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.7;entryX=0;entryY=0.5;fontSize=10;" edge="1" source="client" target="qs-controller" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- DGS to PostgreSQL -->
+        <mxCell id="e3" value="upsert (5s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;fontSize=10;" edge="1" source="dgs-aggregation" target="postgres" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- DGS to Redis -->
+        <mxCell id="e4" value="ZADD (5s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;fontSize=10;" edge="1" source="dgs-redis-pub" target="redis" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Redis to QS Loader -->
+        <mxCell id="e5" value="read all (60s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;fontSize=10;dashed=1;" edge="1" source="redis" target="qs-loader" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- DGS Controller to Aggregation -->
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="dgs-controller" target="dgs-aggregation" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Aggregation to Redis Publisher -->
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="dgs-aggregation" target="dgs-redis-pub" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- QS Controller to Service -->
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="qs-controller" target="qs-service" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- QS Service to Trie -->
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="qs-service" target="qs-trie" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- QS Loader to Trie -->
+        <mxCell id="e10" value="rebuild" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;fontSize=10;" edge="1" source="qs-loader" target="qs-trie" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Prometheus scrapes -->
+        <mxCell id="e11" value="/actuator/prometheus" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;fontSize=9;strokeColor=#d79b00;" edge="1" source="prometheus" target="dgs-group" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" value="/actuator/prometheus" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;fontSize=9;strokeColor=#d79b00;" edge="1" source="prometheus" target="qs-group" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Grafana to Prometheus -->
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#d79b00;" edge="1" source="grafana" target="prometheus" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

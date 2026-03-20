@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'data-gathering-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['data-gathering-service:8081']
+
+  - job_name: 'query-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['query-service:8080']
